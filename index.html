@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Сокровищница Ислама — исламский книжный магазин</title>
+<meta name="description" content="Сокровищница Ислама — книги, которые меняют сердца и наполняют жизнь смыслом. Коран и тафсиры, хадисы, акыда, фикх, жизнеописание Пророка ﷺ, воспитание души.">
+<meta name="theme-color" content="#04100a">
+<link rel="icon" type="image/png" href="assets/favicon.png?v=2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Manrope:wght@400;500;600;700;800&display=swap&subset=cyrillic" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="preload" as="image" href="assets/hero.webp?v=4">
+</head>
+<body>
+
+<!-- ============ SVG-спрайт: 2D-иконки (тонкая золотая линия) ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-quran" viewBox="0 0 32 32"><path d="M4 7.5C8.5 6 12.5 6.6 16 9.2c3.5-2.6 7.5-3.2 12-1.7V24c-4.5-1.5-8.5-.9-12 1.7C12.5 23.1 8.5 22.5 4 24z"/><path d="M16 9.2v16.5M7.5 11c2.2-.4 4.2 0 6 1M7.5 15c2.2-.4 4.2 0 6 1M18.5 12c1.8-1 3.8-1.4 6-1M18.5 16c1.8-1 3.8-1.4 6-1"/></symbol>
+    <symbol id="i-hadith" viewBox="0 0 32 32"><path d="M9 25c3.5 1 8 .6 10.5-2.4 2-2.4 1.8-6-.6-7.8-2.2-1.6-5.2-1-6.4 1.2-1 1.8-.2 3.8 1.6 4.2"/><path d="M19 11.5c1.5-1.8 4-2.6 6.4-1.8"/><path d="M6 25.5h20"/><circle cx="23.5" cy="6" r="1" fill="currentColor"/><path d="M14 7.5l1.2 2.4 2.6.4-1.9 1.8.5 2.6L14 13.4"/></symbol>
+    <symbol id="i-aqida" viewBox="0 0 32 32"><path d="M5 14.5L16 4.5l11 10"/><path d="M7.5 13v14.5h17V13"/><path d="M13 27.5v-6.2a3 3 0 016 0v6.2"/><path d="M16 9.4l1 2 2.2.3-1.6 1.5.4 2.2-2-1-2 1 .4-2.2-1.6-1.5 2.2-.3z"/></symbol>
+    <symbol id="i-fiqh" viewBox="0 0 32 32"><path d="M16 4.5v22M9.5 27h13"/><path d="M6.5 9.5h19"/><path d="M6.5 9.5l-3.5 8a4 4 0 007 0z"/><path d="M25.5 9.5l-3.5 8a4 4 0 007 0z"/><circle cx="16" cy="4.5" r="1.4"/></symbol>
+    <symbol id="i-sira" viewBox="0 0 32 32"><path d="M5 27.5h22"/><path d="M7 27.5V18c0-4.8 4-7.8 9-11.5 5 3.7 9 6.7 9 11.5v9.5"/><path d="M16 6.5V3.5M15 4.5h2"/><path d="M12.5 27.5v-5.2a3.5 3.5 0 017 0v5.2"/><path d="M3.5 27.5V13l1.6-3 1.6 3v14.5M25.3 27.5V13l1.6-3 1.6 3v14.5"/></symbol>
+    <symbol id="i-prophets" viewBox="0 0 32 32"><path d="M16 28.5V12"/><path d="M16 22c-4.5 0-7-2.6-7.4-6.4 4.2-.2 7 1.8 7.4 6.4z"/><path d="M16 17.5c4.2 0 6.6-2.5 7-6-4 .1-6.7 1.9-7 6z"/><path d="M16 12c-2.8-1-4.2-3.2-4.2-6 2.8.7 4.2 3 4.2 6z"/><path d="M16 12c2.8-1 4.2-3.2 4.2-6-2.8.7-4.2 3-4.2 6z"/><path d="M11 28.5h10"/></symbol>
+    <symbol id="i-soul" viewBox="0 0 32 32"><path d="M16 27.5c-5.5-3.6-9.5-7.6-9.5-12.2C6.5 11.8 9 9.5 12 9.5c1.7 0 3.2.9 4 2.2.8-1.3 2.3-2.2 4-2.2 3 0 5.5 2.3 5.5 5.8 0 4.6-4 8.6-9.5 12.2z"/><path d="M16 11.7V5M13.2 7.3L16 5l2.8 2.3"/></symbol>
+    <symbol id="i-goods" viewBox="0 0 32 32"><path d="M16 3.5l3.6 5 6.1.3.3 6.1 4.5 3.6-4.5 3.6-.3 6.1-6.1.3-3.6 5-3.6-5-6.1-.3-.3-6.1L1.5 18l4.5-3.6.3-6.1 6.1-.3z" transform="translate(0 -1.5) scale(.95) translate(.8 1.6)"/><circle cx="16" cy="16.2" r="3.6"/></symbol>
+    <!-- служебные -->
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.7"/><path d="M4.5 20.5c.6-4 3.7-6.2 7.5-6.2s6.9 2.2 7.5 6.2"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.5C6 16.6 3.5 13.4 3.5 9.8 3.5 7.2 5.4 5.5 7.7 5.5c1.8 0 3.4 1 4.3 2.6.9-1.6 2.5-2.6 4.3-2.6 2.3 0 4.2 1.7 4.2 4.3 0 3.6-2.5 6.8-8.5 10.7z"/></symbol>
+    <symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 4h2.6l2.2 11.2h9.7L19.8 8H7"/><circle cx="9.2" cy="19.2" r="1.3"/><circle cx="17" cy="19.2" r="1.3"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15M13.5 6.5L19 12l-5.5 5.5"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M6 9.5l6 6 6-6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-book" viewBox="0 0 48 48"><path d="M6 12c6.5-1.8 12.5-.8 18 3.2 5.500-4 11.500-5 18-3.200v24c-6.500-1.800-12.500-.8-18 3.200-5.500-4-11.500-5-18-3.200z"/><path d="M24 15.200v24"/><path d="M11 18.500c3.200-.6 6.200 0 9 1.500M11 24c3.200-.6 6.200 0 9 1.500M28 20c2.800-1.500 5.800-2.100 9-1.500M28 25.500c2.800-1.500 5.800-2.100 9-1.500"/></symbol>
+    <symbol id="i-truck" viewBox="0 0 48 48"><path d="M5 12.500h24v21H5z"/><path d="M29 19h8.500l5.500 6.500v8H29"/><circle cx="14" cy="35" r="3.500"/><circle cx="36" cy="35" r="3.500"/><path d="M10 18h10M10 23h14M33 22.500h4"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 48 48"><path d="M24 4.500l15 5.500v11.500c0 9.500-6 17.500-15 22-9-4.500-15-12.500-15-22V10z"/><path d="M16.500 24l5.500 5.500 10-11"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 48 48"><path d="M24 41C10 31.500 6 25 6 19.500 6 14.500 9.800 11 14.300 11c3.800 0 7.400 2.200 9.700 6 2.300-3.800 5.900-6 9.700-6C38.200 11 42 14.500 42 19.500 42 25 38 31.500 24 41z"/><path d="M24 17c-1-3-3.500-5-6.500-5M24 17c1-3 3.500-5 6.500-5" opacity=".0"/></symbol>
+    <symbol id="i-star8" viewBox="0 0 32 32"><path d="M16 2l3.500 8.500L28 8l-2.500 8.500L28 24l-8.500-2.500L16 30l-3.500-8.500L4 24l2.500-7.500L4 8l8.500 2.500z"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4.500h3.500l1.800 4.500-2.200 1.500c1.200 2.600 3.200 4.600 5.800 5.800l1.500-2.200 4.500 1.800V19c0 1-1 1.800-2 1.800C10 20.500 3.500 14 3.200 6.500c0-1 .8-2 1.800-2z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3.500" y="5.500" width="17" height="13" rx="2"/><path d="M4 7l8 6 8-6"/></symbol>
+    <!-- золотая фольга для тиснения обложек (координаты в системе обложки 200×280) -->
+    <linearGradient id="foil" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="200" y2="280">
+      <stop offset="0" stop-color="#fbeec9"/><stop offset=".35" stop-color="#e8cd9e"/><stop offset=".7" stop-color="#c9a566"/><stop offset="1" stop-color="#a47a3a"/>
+    </linearGradient>
+    <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.500 9.500z"/><path d="M15.500 9a4 4 0 010 6M18 6.500a7.500 7.500 0 010 11"/></symbol>
+    <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.500 9.500z"/><path d="M16 9.500l5 5M21 9.500l-5 5"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M19.500 14.500A8 8 0 019.500 4.500a8 8 0 1010 10z"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 48 48"><path d="M12 5.500h17l8 8V42.500H12z"/><path d="M29 5.500v8h8"/><path d="M18 22h13M18 28h13M18 34h8"/></symbol>
+    <symbol id="i-pin"viewBox="0 0 24 24"><path d="M12 21s6.500-5.800 6.500-11A6.500 6.500 0 005.500 10c0 5.200 6.500 11 6.500 11z"/><circle cx="12" cy="10" r="2.300"/></symbol>
+  </defs>
+</svg>
+
+<!-- ============ ЗАГРУЗОЧНЫЙ ЭКРАН ============ -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader-in">
+    <img class="loader-logo" src="assets/logo-full.webp?v=2" alt="" width="618" height="221">
+    <i class="loader-bar"><b></b></i>
+  </div>
+</div>
+<noscript><style>.loader{display:none!important}html.is-loading{overflow:auto!important}.hero .eyebrow,.hero h1 .ln>span,.hero p.lead,.hero .cta{animation-play-state:running!important}</style></noscript>
+
+<!-- ============ ПЛАШКА: УСЛОВИЯ ДОСТАВКИ И ОПТА ============ -->
+<div class="promo" id="promo" role="region" aria-label="Условия доставки">
+  <svg class="ico promo-ico" aria-hidden="true"><use href="#i-truck"/></svg>
+  <span class="promo-t">Доставка по <b>Хасавюртовскому району и Ингушетии</b></span>
+  <span class="promo-opt"><i aria-hidden="true">·</i>Опт от 5 шт.</span>
+  <button class="promo-x" type="button" id="promoX" aria-label="Закрыть плашку"><svg class="ico"><use href="#i-close"/></svg></button>
+</div>
+
+<div class="progress"><i id="progress"></i></div>
+<div class="cursor" id="cursor" aria-hidden="true"><i class="dot"></i><i class="ring"></i></div>
+<canvas id="dust" aria-hidden="true"></canvas>
+
+<!-- ================= ШАПКА ================= -->
+<header class="hdr" id="hdr">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Сокровищница Ислама — на главную">
+      <img class="b-mark" src="assets/logo-mark.webp?v=2" alt="" width="192" height="221">
+      <img class="b-word" src="assets/logo-word.webp?v=2" alt="Сокровищница Ислама" width="424" height="96">
+    </a>
+    <nav>
+      <ul class="nav" id="nav">
+        <li><a href="#top" class="is-active">Главная</a></li>
+        <li>
+          <button type="button" aria-haspopup="true">Каталог <svg class="ico chev"><use href="#i-down"/></svg></button>
+          <div class="drop" id="drop"></div>
+        </li>
+        <li><a href="#about">О нас</a></li>
+        <li><a href="#delivery">Доставка</a></li>
+        <li><a href="#contacts">Контакты</a></li>
+      </ul>
+    </nav>
+    <div class="tools">
+      <label class="search">
+        <svg class="ico"><use href="#i-search"/></svg>
+        <span class="sr">Поиск</span>
+        <input id="q" type="search" placeholder="Поиск по книгам, авторам, категориям..." autocomplete="off">
+      </label>
+      <button class="ibtn snd" type="button" id="sndBtn" aria-label="Включить звук" aria-pressed="false"><svg class="ico s-off"><use href="#i-mute"/></svg><svg class="ico s-on"><use href="#i-sound"/></svg></button>
+      <button class="ibtn" type="button" id="wishBtn" aria-label="Избранное"><svg class="ico"><use href="#i-heart"/></svg><span class="badge" id="wishBadge">0</span></button>
+      <button class="ibtn" type="button" id="cartBtn" aria-label="Корзина"><svg class="ico"><use href="#i-cart"/></svg><span class="badge" id="cartBadge">0</span></button>
+      <button class="ibtn burger" type="button" id="burger" aria-label="Меню"><svg class="ico"><use href="#i-menu"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="hero">
+  <div class="hero-bg" id="heroBg">
+    <picture>
+      <source media="(max-width:860px)" srcset="assets/hero-m.webp?v=4">
+      <img class="hero-media" src="assets/hero.webp?v=4" alt="Вид из мечети на вечерний силуэт минаретов на закате" fetchpriority="high">
+    </picture>
+  </div>
+  <img class="hero-lantern" id="heroLantern" src="" alt="" aria-hidden="true">
+  <div class="hero-in">
+    <span class="eyebrow">Исламский книжный магазин</span>
+    <h1 aria-label="Сокровищница Ислама"><span class="ln"><span>Сокровищница</span></span><span class="ln"><span><em>Ислама</em></span></span></h1>
+    <p class="lead">Книги, которые меняют сердца<br>и наполняют жизнь смыслом</p>
+    <div class="cta">
+      <a href="#catalog" class="btn btn-gold mag">Перейти в каталог <svg class="ico"><use href="#i-arrow"/></svg></a>
+      <a href="#about" class="btn btn-ghost mag">О магазине</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><i></i>Листайте вниз</div>
+</section>
+
+<!-- ================= КАТЕГОРИИ ================= -->
+<section class="cats" aria-label="Разделы">
+  <ul id="cats"></ul>
+</section>
+
+<div class="paper paper-a" id="paperA">
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-t" id="marquee"></div>
+</div>
+
+<!-- ================= КАТАЛОГ ================= -->
+<section class="sec" id="catalog">
+  <div class="sec-head">
+    <div data-reveal>
+      <span class="eyebrow">Каталог</span>
+      <h2>Книги, которые <em>остаются</em><br>в сердце</h2>
+    </div>
+    <p data-reveal style="--d:120ms">Выберите раздел, найдите нужное в поиске или переключитесь на оптовые цены.</p>
+    <!-- 3D-книга из кода: открывается и закрывается по мере прокрутки -->
+    <div class="catbook" id="catBook" aria-hidden="true">
+      <div class="cb-scene">
+        <div class="cam" id="cbCam">
+          <div class="book" id="cbBook">
+            <i class="f back-out"></i><i class="f back-in"></i><i class="f spine"></i><i class="f redge"></i><i class="f tedge"></i><i class="f bedge"></i><i class="f pg0"></i>
+            <div class="leaf"><i class="f lf"></i><i class="f lb"></i></div>
+            <div class="leaf"><i class="f lf"></i><i class="f lb"></i></div>
+            <div class="leaf"><i class="f lf"></i><i class="f lb"></i></div>
+            <div class="leaf"><i class="f lf"></i><i class="f lb"></i></div>
+            <div class="front" id="cbFront"><i class="f fo"></i><i class="f fi"></i><i class="f fbot"></i><i class="f ftop"></i><i class="f fside"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="chips" id="chips" role="tablist" aria-label="Категории"></div>
+    <div class="opts">
+      <div class="seg" id="mode" data-v="0" role="group" aria-label="Тип цены">
+        <span class="thumb"></span>
+        <button type="button" class="on" data-m="0">Розница</button>
+        <button type="button" data-m="1">Опт</button>
+      </div>
+      <select class="sel" id="sort" aria-label="Сортировка">
+        <option value="pop">Сначала популярные</option>
+        <option value="new">Сначала новинки</option>
+        <option value="pa">Цена: по возрастанию</option>
+        <option value="pd">Цена: по убыванию</option>
+        <option value="az">По названию</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <div class="more"><button type="button" class="btn btn-ghost mag" id="more">Показать ещё <svg class="ico"><use href="#i-down"/></svg></button></div>
+</section>
+
+</div>
+
+<!-- ================= ПРЕИМУЩЕСТВА ================= -->
+<section class="sec" id="delivery">
+  <div class="perks" data-reveal>
+    <div class="perk"><svg class="ico"><use href="#i-book"/></svg><div><h3>Проверенные издания</h3><p>Только качественные книги из надёжных источников.</p></div></div>
+    <div class="perk"><svg class="ico"><use href="#i-truck"/></svg><div><h3>Доставка по Хасавюртовскому району и Ингушетии</h3><p>Бережно упакуем и доставим в Хасавюртовский район и Республику Ингушетия.</p></div></div>
+    <div class="perk"><svg class="ico"><use href="#i-shield"/></svg><div><h3>Гарантия качества</h3><p>Заменим книгу, если в ней обнаружится брак.</p></div></div>
+  </div>
+</section>
+
+<!-- ================= МАНИФЕСТ ================= -->
+<section class="manifest" id="about">
+  <div class="pattern"></div>
+  <div class="manifest-in">
+    <div data-reveal>
+      <span class="eyebrow">О магазине</span>
+      <blockquote style="margin-top:20px">Мы собираем книги так, как собирают <em>сокровища</em>: бережно, с любовью и только то, что действительно ценно.</blockquote>
+      <div class="stats">
+        <div class="stat"><b id="statBooks" data-count="48">0</b><span>книг в каталоге</span></div>
+        <div class="stat"><b id="statCats" data-count="8">0</b><span>тематических разделов</span></div>
+        <div class="stat"><b data-count="100">0</b><span>% проверенных изданий</span></div>
+      </div>
+    </div>
+    <div class="relic" data-reveal style="--d:150ms" id="relic">
+      <div class="halo"></div>
+      <img id="relicImg" src="" alt="Золотой восточный фонарь" loading="lazy">
+    </div>
+  </div>
+  <img class="deco deco-ink" data-deco=".05" data-rot=".6" src="assets/inkwell.webp?v=1" alt="" aria-hidden="true" loading="lazy" onerror="this.remove()">
+</section>
+
+<div class="paper paper-b" id="paperB">
+<!-- ================= КАК ЗАКАЗАТЬ ОПТОМ ================= -->
+<section class="sec" id="how">
+  <div class="how-head" data-reveal>
+    <span class="eyebrow">Как заказать оптом</span>
+    <h2>Четыре шага до <em>вашей партии</em></h2>
+  </div>
+  <ol class="steps">
+    <li class="step" data-reveal style="--d:0ms">
+      <span class="step-n">01</span>
+      <svg class="ico"><use href="#i-book"/></svg>
+      <h3>Выберите книги</h3>
+      <p>Отметьте нужные позиции в каталоге. Оптовые цены действуют от 5 экземпляров одной книги.</p>
+    </li>
+    <li class="step" data-reveal style="--d:120ms">
+      <span class="step-n">02</span>
+      <svg class="ico"><use href="#i-doc"/></svg>
+      <h3>Оставьте заявку</h3>
+      <p>Заполните форму ниже: перечислите книги и тираж. Это ни к чему вас не обязывает.</p>
+    </li>
+    <li class="step" data-reveal style="--d:240ms">
+      <span class="step-n">03</span>
+      <svg class="ico"><use href="#i-phone"/></svg>
+      <h3>Согласуем детали</h3>
+      <p>Свяжемся с вами, подтвердим наличие, подберём ассортимент и выставим счёт.</p>
+    </li>
+    <li class="step" data-reveal style="--d:360ms">
+      <span class="step-n">04</span>
+      <svg class="ico"><use href="#i-truck"/></svg>
+      <h3>Получите партию</h3>
+      <p>Бережно упакуем и доставим в Хасавюртовский район или Республику Ингушетия.</p>
+    </li>
+  </ol>
+</section>
+
+<!-- ================= ОПТ ================= -->
+<section class="sec" id="opt">
+  <div class="opt-wrap">
+  <img class="deco deco-rehal" data-deco=".04" data-rot="0" src="assets/rehal.webp?v=1" alt="" aria-hidden="true" loading="lazy" onerror="this.remove()">
+  <div class="opt" data-reveal>
+    <div class="opt-l">
+      <span class="eyebrow">Оптовым покупателям</span>
+      <h2>Книги для мечетей, магазинов и медресе</h2>
+      <p>Специальные оптовые цены от 5 экземпляров одной позиции. Подберём ассортимент и подготовим счёт.</p>
+      <ul>
+        <li><svg class="ico"><use href="#i-check"/></svg> Оптовые цены в каждой карточке</li>
+        <li><svg class="ico"><use href="#i-check"/></svg> Индивидуальный подбор под вашу аудиторию</li>
+        <li><svg class="ico"><use href="#i-check"/></svg> Отгрузка и доставка: Хасавюртовский район и Республика Ингушетия</li>
+      </ul>
+    </div>
+    <form class="opt-r" id="optForm" novalidate>
+      <div class="field"><input id="oName" placeholder=" " autocomplete="name" required><label for="oName">Ваше имя</label></div>
+      <div class="field"><input id="oPhone" placeholder=" " type="tel" autocomplete="tel" required><label for="oPhone">Телефон</label></div>
+      <div class="field"><textarea id="oMsg" placeholder=" "></textarea><label for="oMsg">Что вас интересует</label></div>
+      <button class="btn btn-gold mag" type="submit" value="tg">Заказать в Telegram <svg class="ico"><use href="#i-arrow"/></svg></button>
+      <button class="btn btn-ghost mag" type="submit" value="wa">Заказать в WhatsApp <svg class="ico"><use href="#i-arrow"/></svg></button>
+      <p class="note">Откроется чат с продавцом. Заявка уже будет написана, можно отправить в Telegram или WhatsApp.</p>
+    </form>
+  </div>
+  </div>
+</section>
+
+</div>
+
+</main>
+
+<!-- ================= ПОДВАЛ ================= -->
+<footer class="ftr" id="contacts">
+  <div class="ftr-in">
+    <div>
+      <a class="brand brand-full" href="#top" aria-label="Сокровищница Ислама — книги, знания, вера"><img src="assets/logo-full.webp?v=2" alt="Сокровищница Ислама. Книги · Знания · Вера" width="618" height="221" loading="lazy"></a>
+      <p>Книги · Знания · Вера. Исламский книжный магазин с доставкой в Хасавюртовский район и Республику Ингушетия.</p>
+    </div>
+    <div>
+      <h4>Разделы</h4>
+      <ul id="fCats"></ul>
+    </div>
+    <div>
+      <h4>Магазин</h4>
+      <ul>
+        <li><a href="#catalog">Каталог</a></li>
+        <li><a href="#opt">Опт</a></li>
+        <li><a href="#delivery">Доставка</a></li>
+        <li><a href="#about">О нас</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Контакты</h4>
+      <ul>
+        <li><a href="https://t.me/Arion9697" target="_blank" rel="noopener">Telegram: @Arion9697</a></li>
+        <li><a href="https://wa.me/79289737940" target="_blank" rel="noopener">WhatsApp: +7 928 973-79-40</a></li>
+        <li><a href="#delivery">Доставка: Хасавюртовский район и Ингушетия</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ftr-b"><span>© 2026 Сокровищница Ислама. Все права защищены.</span><span>Книги · Знания · Вера</span></div>
+</footer>
+
+<!-- ================= КОРЗИНА ================= -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Корзина" aria-hidden="true">
+  <div class="drawer-h"><h3 id="drawerTitle">Корзина</h3><button class="x" type="button" id="drawerX" aria-label="Закрыть"><svg class="ico"><use href="#i-close"/></svg></button></div>
+  <div class="drawer-l" id="cartList"></div>
+  <div class="drawer-f" id="cartFoot"></div>
+</aside>
+
+<!-- ================= БЫСТРЫЙ ПРОСМОТР ================= -->
+<div class="modal" id="modal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="modal-box" id="modalBox"></div>
+</div>
+
+<div class="toast" id="toast" role="status"><svg class="ico"><use href="#i-check"/></svg><span id="toastTxt"></span></div>
+
+<script src="js/books.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
