@@ -772,12 +772,12 @@
 
   /* =========================================================
      КНИГА В ЗАГОЛОВКЕ КАТАЛОГА: открывается и закрывается по прокрутке
-     (3D на CSS, без картинок и видео; размеры «мира»: W=300, H=420, D=52)
+     (3D на CSS, без картинок и видео; размеры «мира»: W=300, H=360, D=52)
      ========================================================= */
   function catBook() {
     var host = $('#catBook'); if (!host) return;
     var cam = $('#cbCam'), book = $('#cbBook'), front = $('#cbFront');
-    var W = 300, H = 420, D = 52, RAD = Math.PI / 180, cur = 0, last = -1;
+    var W = 300, H = 360, D = 52, RAD = Math.PI / 180, cur = 0, last = -1;
     var ease = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
     var seg = function (p, a, b) { return clamp((p - a) / (b - a), 0, 1); };
 
@@ -793,15 +793,15 @@
       return '<polygon points="' + p.join(' ') + '"/>';
     }
     var HALF = '<path d="M120 170C142 164 156 178 152 196C138 196 126 188 120 170z"/><path d="M120 214C148 212 160 232 146 242C134 249 122 238 130 230C135 225 141 228 139 233"/><path d="M120 258C142 254 154 268 150 284C136 284 126 276 120 258z"/>';
-    var ARCH = '<svg viewBox="0 0 240 340" preserveAspectRatio="xMidYMid meet">' +
+    var ARCH = '<svg viewBox="0 0 240 296" preserveAspectRatio="xMidYMid meet">' +
       '<defs><pattern id="cbS" width="26" height="26" patternUnits="userSpaceOnUse"><rect x="4" y="4" width="18" height="18"/><rect x="4" y="4" width="18" height="18" transform="rotate(45 13 13)"/><circle cx="13" cy="13" r="3"/></pattern>' +
       '<pattern id="cbR" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M6 1l2 3 3 2-3 2-2 3-2-3-3-2 3-2z"/></pattern></defs>' +
-      '<rect x="3" y="3" width="234" height="334" rx="3"/><rect x="10" y="10" width="220" height="320" rx="2" opacity=".7"/>' +
-      '<rect x="14" y="14" width="212" height="312" fill="url(#cbR)" stroke="none" opacity=".55"/><rect x="26" y="26" width="188" height="288" rx="2"/>' +
-      '<rect x="28" y="28" width="184" height="284" fill="url(#cbS)" stroke="none" opacity=".5"/>' +
-      '<path d="M66 56H174L186 68V272L174 284H66L54 272V68Z" fill="#f8efd3" stroke-width="1.7"/>' +
-      '<path d="M70 64H170L178 72V268L170 276H70L62 268V72Z" opacity=".75"/>' +
-      '<path d="M120 60l3 3-3 3-3-3zM120 274l3 3-3 3-3-3zM60 168l3 3-3 3-3-3zM180 168l3 3-3 3-3-3z" opacity=".9"/></svg>';
+      '<rect x="3" y="3" width="234" height="290" rx="3"/><rect x="10" y="10" width="220" height="276" rx="2" opacity=".7"/>' +
+      '<rect x="14" y="14" width="212" height="268" fill="url(#cbR)" stroke="none" opacity=".55"/><rect x="26" y="26" width="188" height="244" rx="2"/>' +
+      '<rect x="28" y="28" width="184" height="240" fill="url(#cbS)" stroke="none" opacity=".5"/>' +
+      '<path d="M66 56H174L186 68V228L174 240H66L54 228V68Z" fill="#f8efd3" stroke-width="1.7"/>' +
+      '<path d="M70 64H170L178 72V224L170 232H70L62 224V72Z" opacity=".75"/>' +
+      '<path d="M120 60l3 3-3 3-3-3zM120 230l3 3-3 3-3-3zM60 124l3 3-3 3-3-3zM180 124l3 3-3 3-3-3z" opacity=".9"/></svg>';
     var VINE = '<svg viewBox="0 0 120 30" width="96" height="24"><path d="M4 15Q22 2 40 15T76 15T116 15"/><path d="M22 9q-3-6-9-6M58 21q3 6 9 6M94 9q3-6 9-6M40 15l-4 6M76 15l4-6"/><circle cx="60" cy="15" r="2.4"/></svg>';
     function lines(n, indent) {
       var h = '';
@@ -837,7 +837,7 @@
       var e1 = ease(seg(p, .08, .6));                                          // обложка откидывается
       var spanL = W * Math.max(0, -Math.cos(178 * e1 * RAD));                   // ширина откинутой половины
       var bw = host.offsetWidth, bh = host.offsetHeight;
-      var scC = Math.min(bh * .76 / H, bw * .52 / W), scO = Math.min(bw * .94 / (2 * W), bh * .76 / H) * .9;   // запас под наклон и веер страниц
+      var scC = Math.min(bh * .76 / H, bw * .52 / W), scO = Math.min(bw * .97 / (2 * W), bh * .88 / H) * .88;   // запас под наклон и веер страниц
       var sc = scC + (scO - scC) * e1;
       cam.style.transform = 'scale(' + sc.toFixed(4) + ') rotateX(' + (-6 - 10 * e1).toFixed(2) + 'deg) rotateY(' + (-26 * (1 - e1) + 4 * e1).toFixed(2) + 'deg)';   // раскрытая книга чуть наклонена к зрителю — видна толщина блока
       book.style.transform = 'translate3d(' + (-(W - spanL) / 2).toFixed(2) + 'px,0,0)';   // разворот всегда по центру
