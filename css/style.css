@@ -868,3 +868,6 @@ body:not(.ready) .hero .hero-ship{animation-play-state:paused}
   box-shadow:inset 0 0 0 1px rgba(255,235,180,.22);
   transform:translateZ(-17px) rotateY(-90deg);border-radius:1px}
 .cover.side3d .glare{border-radius:inherit}
+
+/* плашка «Редкая»: маленькая, в самом углу, не заходит на книгу */
+.badge-n.rare{top:3px;left:8px;padding:3px 9px;font-size:10px;letter-spacing:.05em;white-space:nowrap;line-height:1.2}

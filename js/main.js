@@ -21,6 +21,7 @@
   var BOOKS = window.BOOKS || [];
   var CATS = window.CATEGORIES || [];
   var catName = {}; CATS.forEach(function (c) { catName[c.key] = c.name; });
+  function catNames(b) { return b.cats.map(function (k) { return catName[k]; }).join(' · '); }
   var byId = {}; BOOKS.forEach(function (b) { byId[b.id] = b; });
 
   var state = {
@@ -163,12 +164,12 @@
   function filtered() {
     var q = state.q.trim().toLowerCase();
     var list = BOOKS.filter(function (b) {
-      if (state.cat !== 'all' && b.cat !== state.cat) return false;
+      if (state.cat !== 'all' && b.cats.indexOf(state.cat) < 0) return false;
       if (!q) return true;
-      return (b.title + ' ' + b.author + ' ' + (catName[b.cat] || '')).toLowerCase().indexOf(q) > -1;
+      return (b.title + ' ' + b.author + ' ' + catNames(b)).toLowerCase().indexOf(q) > -1;
     });
     var price = function (b) { return state.mode === 1 ? b.wholesale : b.retail; };
-    var rank = { hit: 0, new: 1, '': 2 };
+    var rank = { hit: 0, rare: 1, new: 1, '': 2 };
     list.sort(function (a, b) {
       switch (state.sort) {
         case 'pa': return price(a) - price(b);
@@ -185,16 +186,17 @@
     var inWish = state.wish.indexOf(b.id) > -1;
     var opt = state.mode === 1;
     var priceHTML = opt
-      ? '<b>' + rub(b.wholesale) + '</b><s>' + rub(b.retail) + '</s><small>опт, заказ от ' + rub(MIN_OPT) + '</small>'
+      ? (b.onOrder ? '<b>' + rub(b.retail) + '</b><small>опт — под заказ</small>'
+        : '<b>' + rub(b.wholesale) + '</b><s>' + rub(b.retail) + '</s><small>опт, заказ от ' + rub(MIN_OPT) + '</small>')
       : '<b>' + rub(b.retail) + '</b><small>розница</small>';
     return '<article class="card" style="--i:' + (i % 12) + '" data-id="' + b.id + '">' +
       '<div class="cover-wrap"' + bgStyle(b) + '>' +
-        (b.badge === 'new' ? '<span class="badge-n new">Новинка</span>' : '') +
+        (b.badge === 'new' ? '<span class="badge-n new">Новинка</span>' : b.badge === 'rare' ? '<span class="badge-n rare">Редкая</span>' : '') +
         '<button class="wish' + (inWish ? ' on' : '') + '" type="button" aria-label="В избранное" data-act="wish"><svg class="ico"><use href="#i-heart"/></svg></button>' +
         '<div class="cover" data-act="view">' + coverHTML(b) + '<i class="glare"></i></div>' +
         '<span class="qv" data-act="view"><svg class="ico"><use href="#i-search"/></svg>Быстрый просмотр</span>' +
       '</div>' +
-      '<div class="card-b"><span class="cat">' + esc(catName[b.cat]) + '</span><h3>' + esc(b.title) + '</h3><span class="au">' + esc(b.author) + '</span></div>' +
+      '<div class="card-b"><span class="cat">' + esc(catNames(b)) + '</span><h3>' + esc(b.title) + '</h3><span class="au">' + esc(b.author) + '</span></div>' +
       '<div class="card-f"><div class="price">' + priceHTML + '</div>' +
       '<button class="add" type="button" aria-label="Добавить в корзину" data-act="add"><svg class="ico"><use href="#i-plus"/></svg></button></div>' +
       '</article>';
@@ -282,10 +284,10 @@
   function quickView(id) {
     var b = byId[id];
     openModal('<div class="cover-wrap"' + bgStyle(b) + '><div class="cover" style="aspect-ratio:3/4.1">' + coverHTML(b) + '</div></div>' +
-      '<div class="info"><span class="cat">' + esc(catName[b.cat]) + '</span><h3>' + esc(b.title) + '</h3><div class="au">' + esc(b.author) + '</div>' +
+      '<div class="info"><span class="cat">' + esc(catNames(b)) + '</span><h3>' + esc(b.title) + '</h3><div class="au">' + esc(b.author) + '</div>' +
       '<p>' + esc(b.desc) + '</p>' +
       '<div class="spec">' + (b.pages ? '<div>Страниц<b>' + b.pages + '</b></div>' : '') + (b.year ? '<div>Год<b>' + b.year + '</b></div>' : '') + '<div>Опт, заказ от<b>' + rub(MIN_OPT) + '</b></div></div>' +
-      '<div class="prices"><div class="p"><b>' + rub(b.retail) + '</b><span>розница</span></div><div class="p"><b>' + rub(b.wholesale) + '</b><span>опт, заказ от ' + rub(MIN_OPT) + '</span></div></div>' +
+      '<div class="prices"><div class="p"><b>' + rub(b.retail) + '</b><span>розница</span></div><div class="p">' + (b.onOrder ? '<b>под заказ</b><span>опт</span>' : '<b>' + rub(b.wholesale) + '</b><span>опт, заказ от ' + rub(MIN_OPT) + '</span>') + '</div></div>' +
       '<button class="btn btn-gold mag" type="button" data-addm="' + b.id + '">В корзину <svg class="ico"><use href="#i-arrow"/></svg></button></div>');
   }
   /* ---------- заказ в Telegram продавца ---------- */
@@ -695,7 +697,7 @@
   function calc() {
     var sel = $('#cBook'); if (!sel) return;
     sel.innerHTML = CATS.map(function (c) {
-      return '<optgroup label="' + esc(c.name) + '">' + BOOKS.filter(function (b) { return b.cat === c.key; }).map(function (b) {
+      return '<optgroup label="' + esc(c.name) + '">' + BOOKS.filter(function (b) { return b.cats.indexOf(c.key) > -1; }).map(function (b) {
         return '<option value="' + b.id + '">' + esc(b.title) + '</option>';
       }).join('') + '</optgroup>';
     }).join('');
