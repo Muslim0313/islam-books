@@ -429,7 +429,7 @@
 
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeDrawer(); closeModal(); $('#nav').classList.remove('on'); } });
 
-    $('#sort').addEventListener('change', function (e) { state.sort = e.target.value; renderGrid(); });
+    var sortEl = $('#sort'); if (sortEl) sortEl.addEventListener('change', function (e) { state.sort = e.target.value; renderGrid(); });   // выбор сортировки убран с сайта
     var qt;
     $('#q').addEventListener('input', function (e) {
       state.q = e.target.value; state.shown = 12; clearTimeout(qt);

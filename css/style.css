@@ -917,3 +917,29 @@ body:not(.ready) .hero .hero-ship{animation-play-state:paused}
 .catbook .pc .tp{left:23%;right:23%;top:17.5%;bottom:17.5%}
 .catbook .pc .tp .t2{font-size:38px}
 .catbook .pc .tp .ts{width:24px;height:24px}
+
+/* на ноутбуке и широких экранах книга над каталогом крупнее */
+@media (min-width:861px){
+  .catbook{top:-104px;width:clamp(420px,47vw,720px);height:clamp(400px,42vw,620px)}
+  .paper-a .sec-head{min-height:clamp(380px,34vw,540px)}
+}
+
+/* блок «О магазине» с фонарём — короче */
+.manifest{min-height:0}
+.manifest-in{padding-block:52px;gap:28px}
+.manifest .stats{margin-top:30px}
+.relic{min-height:300px}
+.relic img{height:clamp(270px,42vh,390px)}
+@media (max-width:860px){
+  .manifest-in{padding-top:96px;padding-bottom:40px}
+  .relic{min-height:240px}
+  .relic img{height:clamp(220px,36vh,300px)}
+}
+/* на ноутбуках с неширокими окнами и планшетах фонарь стоит рядом с текстом, а не под ним — блок короче */
+@media (min-width:700px) and (max-width:1100px){
+  .manifest-in{grid-template-columns:1.15fr .85fr;gap:24px}
+  .manifest blockquote{font-size:clamp(26px,3.5vw,42px)}
+  .manifest .stats{margin-top:24px}
+  .relic{min-height:240px}
+  .relic img{height:clamp(230px,38vh,330px)}
+}
