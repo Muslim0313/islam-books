@@ -90,24 +90,11 @@
     return n <= 12 ? 13 : n <= 20 ? 11.2 : n <= 30 ? 9.6 : n <= 40 ? 8.4 : 7.4;
   }
 
-  /* ---------- задний план под цвет книги ---------- */
-  function shade(hex, k) {   // k>0 светлее, k<0 темнее
-    var m = /^#?([0-9a-f]{6})$/i.exec(hex || ''); if (!m) return hex;
-    var n = parseInt(m[1], 16), c = [n >> 16, (n >> 8) & 255, n & 255].map(function (v) {
-      return Math.round(clamp(k > 0 ? v + (255 - v) * k : v * (1 + k), 0, 255));
-    });
-    return '#' + c.map(function (v) { return (v < 16 ? '0' : '') + v.toString(16); }).join('');
-  }
-  function bgStyle(b) {
-    if (!b.bg) return '';
-    return ' style="background:radial-gradient(80% 66% at 50% 58%,' + shade(b.bg, .1) + ' 0%,' + shade(b.bg, -.38) + ' 62%,' + shade(b.bg, -.7) + ' 100%)"';
-  }
-
   function coverHTML(b, mini) {
     if (b.cover) {
       return '<img class="real" src="' + esc(b.cover) + '" alt="' + esc(b.title) + '" loading="lazy">';
     }
-    var p = b.bg ? [shade(b.bg, .12), shade(b.bg, -.55)] : PAL.quran, st = 'style="--c1:' + p[0] + ';--c2:' + p[1] + ';--fs:' + titleSize(b.title) + 'cqw"';
+    var p = PAL[b.cat] || PAL.quran, st = 'style="--c1:' + p[0] + ';--c2:' + p[1] + ';--fs:' + titleSize(b.title) + 'cqw"';
     var text = mini ? '' : '<div class="t"><h4>' + esc(b.title) + '</h4><small>' + esc(b.author) + '</small></div>';
     if (b.img) {     // товар (чётки, рахль...): фото-вырезка на тёмной «подложке»
       return '<div class="art art-prod" ' + st + '><svg class="orn" viewBox="0 0 200 280" aria-hidden="true">' + ornament('frame') + '</svg>' +
@@ -127,12 +114,8 @@
   function renderStatic() {
     // цифры в блоке «О магазине» считаются из каталога
     var sb = $('#statBooks'), sc = $('#statCats');
-    if (sb) sb.dataset.count = BOOKS.length;
+    if (sb) sb.dataset.count = BOOKS.filter(function (b) { return b.cat !== 'goods'; }).length;
     if (sc) sc.dataset.count = CATS.length;
-    if (!BOOKS.length) {   // пока каталог пуст — прячем счётчики, разделы, бегущую строку и панель фильтров
-      [sb, sc].forEach(function (e) { if (e) e.parentNode.style.display = 'none'; });
-      ['.cats', '.marquee', '.toolbar', '.more'].forEach(function (q) { var e = $(q); if (e) e.style.display = 'none'; });
-    }
     $('#cats').innerHTML = CATS.map(function (c, i) {
       return '<li data-reveal style="--d:' + i * 55 + 'ms"><a class="tile" href="#catalog" data-cat="' + c.key + '">' +
         '<svg class="ico" viewBox="0 0 32 32"><use href="#i-' + c.icon + '"/></svg><span>' + esc(c.name) + '</span></a></li>';
@@ -144,7 +127,8 @@
 
     $('#fCats').innerHTML = CATS.map(function (c) { return '<li><a href="#catalog" data-cat="' + c.key + '">' + esc(c.name) + '</a></li>'; }).join('');
 
-    var row = CATS.map(function (c) { return '<span>' + esc(c.name) + '</span>'; }).join('');
+    var words = ['Коран и тафсиры', 'Хадисы', 'Акыда', 'Фикх', 'Жизнеописание Пророка ﷺ', 'Истории пророков', 'Воспитание души', 'Исламские товары'];
+    var row = words.map(function (w) { return '<span>' + w + '</span>'; }).join('');
     $('#marquee').innerHTML = row + row;
 
     var chips = '<button class="chip on" type="button" data-cat="all" role="tab">Все книги</button>' +
@@ -183,7 +167,7 @@
       ? '<b>' + rub(b.wholesale) + '</b><s>' + rub(b.retail) + '</s><small>опт от ' + b.minOpt + ' шт.</small>'
       : '<b>' + rub(b.retail) + '</b><small>розница</small>';
     return '<article class="card" style="--i:' + (i % 12) + '" data-id="' + b.id + '">' +
-      '<div class="cover-wrap"' + bgStyle(b) + '>' +
+      '<div class="cover-wrap">' +
         (b.badge === 'new' ? '<span class="badge-n new">Новинка</span>' : '') +
         '<button class="wish' + (inWish ? ' on' : '') + '" type="button" aria-label="В избранное" data-act="wish"><svg class="ico"><use href="#i-heart"/></svg></button>' +
         '<div class="cover" data-act="view">' + coverHTML(b) + '<i class="glare"></i></div>' +
@@ -199,7 +183,7 @@
     var list = filtered();
     var part = list.slice(0, state.shown);
     $('#grid').innerHTML = part.length ? part.map(cardHTML).join('') :
-      '<div class="empty">' + (BOOKS.length ? 'Ничего не найдено. Попробуйте другой запрос или раздел.' : 'Каталог скоро пополнится. Загляните позже или напишите нам.') + '</div>';
+      '<div class="empty">Ничего не найдено. Попробуйте другой запрос или раздел.</div>';
     var more = $('#more');
     more.parentElement.style.display = list.length > state.shown ? '' : 'none';
     more.firstChild.nodeValue = 'Показать ещё (' + (list.length - state.shown) + ') ';
@@ -274,7 +258,7 @@
   }
   function quickView(id) {
     var b = byId[id];
-    openModal('<div class="cover-wrap"' + bgStyle(b) + '><div class="cover" style="aspect-ratio:3/4.1">' + coverHTML(b) + '</div></div>' +
+    openModal('<div class="cover-wrap"><div class="cover" style="aspect-ratio:3/4.1">' + coverHTML(b) + '</div></div>' +
       '<div class="info"><span class="cat">' + esc(catName[b.cat]) + '</span><h3>' + esc(b.title) + '</h3><div class="au">' + esc(b.author) + '</div>' +
       '<p>' + esc(b.desc) + '</p>' +
       '<div class="spec">' + (b.pages ? '<div>Страниц<b>' + b.pages + '</b></div>' : '') + (b.year ? '<div>Год<b>' + b.year + '</b></div>' : '') + '<div>Опт от<b>' + b.minOpt + ' шт.</b></div></div>' +
