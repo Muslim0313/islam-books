@@ -871,3 +871,49 @@ body:not(.ready) .hero .hero-ship{animation-play-state:paused}
 
 /* плашка «Редкая»: маленькая, в самом углу, не заходит на книгу */
 .badge-n.rare{top:3px;left:8px;padding:3px 9px;font-size:10px;letter-spacing:.05em;white-space:nowrap;line-height:1.2}
+
+/* ---------- страницы книги в заголовке каталога: разное содержимое ---------- */
+.catbook .pc{position:absolute;inset:40px 34px 46px 46px;overflow:hidden;pointer-events:none;color:#4a3a1e;text-align:center;font-family:var(--serif,Georgia,serif)}
+.catbook .lb .pc{inset:40px 46px 46px 34px}
+.catbook .pg0 .pc{inset:40px 34px 46px 46px}
+.catbook .pc b{display:block;height:2px;margin:0 0 8.4px;border-radius:1px;background:rgba(74,58,30,.42)}
+.catbook .pc u{display:block;height:10px;text-decoration:none}
+.catbook .pc svg{display:block;margin:0 auto 12px;stroke:#a98232;fill:none;stroke-width:1.2;stroke-linecap:round}
+.catbook .pc .tx{overflow:hidden;text-align:left}
+.catbook .pc h6{margin:4px 0 10px;font:600 19px/1.15 var(--serif,Georgia,serif);color:#1f4a2e;letter-spacing:.01em}
+.catbook .pc .ar{margin:6px 0 10px;font:400 25px/1.4 "Amiri","Noto Naskh Arabic","Traditional Arabic","Times New Roman",serif;direction:rtl;color:#1f4a2e}
+.catbook .pc .dcw{overflow:hidden;margin-bottom:6px}
+.catbook .pc .dc{float:left;margin:0 9px 0 0;font:700 56px/.86 var(--serif,Georgia,serif);color:#8a6a2c}
+.catbook .pc .pn{position:absolute;left:0;right:0;bottom:-8px;font:600 11px/1 var(--serif,Georgia,serif);font-style:normal;letter-spacing:.12em;color:#8a6a2c}
+.catbook .pc .cap{display:block;margin-top:8px;font:600 9px/1.2 var(--sans,Arial,sans-serif);font-style:normal;letter-spacing:.2em;text-transform:uppercase;color:#8a6a2c}
+.catbook .pc .tart{position:absolute;inset:-22px -14px -14px -18px}
+.catbook .pc .tart svg{stroke-width:1.1}
+.catbook .pc .ttl{padding-top:70px}
+.catbook .pc .ttl h6{font-size:24px;margin:10px 0 12px}
+.catbook .pc .qt{padding-top:40px;margin-bottom:26px}
+.catbook .pc .geo{position:absolute;inset:6px 0 18px;border:1px solid rgba(176,138,58,.5);
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='46'%3E%3Cg fill='none' stroke='%23b08a3a' stroke-width='1' opacity='.75'%3E%3Crect x='9' y='9' width='28' height='28'/%3E%3Crect x='9' y='9' width='28' height='28' transform='rotate(45 23 23)'/%3E%3Ccircle cx='23' cy='23' r='5'/%3E%3C/g%3E%3C/svg%3E"),
+    linear-gradient(180deg,rgba(31,90,56,.07),rgba(31,90,56,.02))}
+.catbook .pc.end{inset:0;background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='46'%3E%3Cg fill='none' stroke='%23b08a3a' stroke-width='1' opacity='.55'%3E%3Crect x='9' y='9' width='28' height='28' transform='rotate(45 23 23)'/%3E%3Ccircle cx='23' cy='23' r='4'/%3E%3C/g%3E%3C/svg%3E"),
+    linear-gradient(160deg,#e9dab0,#dac790)}
+/* закладка-ленточка на первой странице правой стопки */
+.catbook .rib{position:absolute;left:90.5%;top:-8px;width:13px;height:250px;z-index:2;background:linear-gradient(90deg,#6e1520,#a82a38 45%,#6e1520);clip-path:polygon(0 0,100% 0,100% 100%,50% 94%,0 100%);box-shadow:0 0 6px rgba(0,0,0,.25)}
+.catbook .pc:has(.tart){overflow:visible}
+
+/* титульная страница с названием сайта */
+.catbook .pc .tp{position:absolute;left:22.5%;right:22.5%;top:16.5%;bottom:16.5%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.catbook .pc .tp svg{margin:0 auto 5px}
+.catbook .pc .tp .ts{fill:rgba(176,138,58,.2);stroke-width:1.2}
+.catbook .pc .tp .t1{display:block;margin:8px 0 0;font:600 11.5px/1 var(--serif,Georgia,serif);font-style:normal;letter-spacing:.22em;text-transform:uppercase;color:#1f4a2e;text-indent:.22em}
+.catbook .pc .tp .t2{display:block;margin:2px 0 10px;font:italic 500 44px/1.05 var(--serif,Georgia,serif);letter-spacing:.01em;
+  background:linear-gradient(180deg,#d1a64a,#9c7226 70%,#7d5a1b);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.catbook .pc .tp .t3{display:block;margin:9px 0 10px;font:600 6.6px/1.3 var(--sans,Arial,sans-serif);font-style:normal;letter-spacing:.2em;text-transform:uppercase;color:#8a6a2c;text-indent:.2em}
+.catbook .pc .tp svg:last-child{margin-bottom:0}
+.catbook .pc .tart{display:flex;align-items:center;justify-content:center}
+.catbook .pc .tart .sq{position:relative;width:100%;aspect-ratio:240/340;flex:none}
+.catbook .pc .tart .sq > svg{position:absolute;left:0;top:0;width:100%;height:100%;margin:0}
+.catbook .pc .tp{left:23%;right:23%;top:17.5%;bottom:17.5%}
+.catbook .pc .tp .t2{font-size:38px}
+.catbook .pc .tp .ts{width:24px;height:24px}

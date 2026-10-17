@@ -582,7 +582,7 @@
      ЗВУК: синтезируется в браузере (файлов нет), по умолчанию ВЫКЛЮЧЕН
      ========================================================= */
   var sfx = (function () {
-    var ctx = null, on = !!store.get('sound', 0);
+    var ctx = null, on = false;   // звук отключён совсем: кнопки включения на сайте нет
     function ac() {
       if (!ctx) { var C = window.AudioContext || window.webkitAudioContext; if (!C) return null; try { ctx = new C(); } catch (e) { return null; } }
       if (ctx.state === 'suspended') ctx.resume();
@@ -778,22 +778,81 @@
      ========================================================= */
   function catBook() {
     var host = $('#catBook'); if (!host) return;
-    var cam = $('#cbCam'), book = $('#cbBook'), front = $('#cbFront'), leaves = $$('.leaf', host);
+    var cam = $('#cbCam'), book = $('#cbBook'), front = $('#cbFront');
     var W = 300, H = 420, D = 52, RAD = Math.PI / 180, cur = 0, last = -1;
     var ease = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
     var seg = function (p, a, b) { return clamp((p - a) / (b - a), 0, 1); };
+
+    /* ---------- страницы книги: разные по содержимому, всего 14 листов (28 страниц) ----------
+       Книга раскрывается «до середины»: 7 листов перелистываются влево, 7 остаются справа веером. */
+    var N = 14, K = 7, seed = 11;
+    function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+    var ORN = '<svg viewBox="0 0 120 14" width="86" height="10"><path d="M2 7h44M74 7h44"/><path d="M60 1l6 6-6 6-6-6z"/><circle cx="50" cy="7" r="1.6"/><circle cx="70" cy="7" r="1.6"/></svg>';
+    var CRES = '<svg viewBox="0 0 40 40" width="26" height="26"><path d="M26 6a14 14 0 1 0 0 28a11 11 0 1 1 0-28z"/><path d="M30 20l2.4 2.4L30 25l-2.4-2.6z"/></svg>';
+    function star(cx, cy, R, r, n) {   // многоконечная звезда (рубъ-эль-хизб и хатам)
+      var p = [];
+      for (var k = 0; k < n * 2; k++) { var a = Math.PI * k / n - Math.PI / 2, d = k % 2 ? r : R; p.push((cx + d * Math.cos(a)).toFixed(1) + ',' + (cy + d * Math.sin(a)).toFixed(1)); }
+      return '<polygon points="' + p.join(' ') + '"/>';
+    }
+    var HALF = '<path d="M120 170C142 164 156 178 152 196C138 196 126 188 120 170z"/><path d="M120 214C148 212 160 232 146 242C134 249 122 238 130 230C135 225 141 228 139 233"/><path d="M120 258C142 254 154 268 150 284C136 284 126 276 120 258z"/>';
+    var ARCH = '<svg viewBox="0 0 240 340" preserveAspectRatio="xMidYMid meet">' +
+      '<defs><pattern id="cbS" width="26" height="26" patternUnits="userSpaceOnUse"><rect x="4" y="4" width="18" height="18"/><rect x="4" y="4" width="18" height="18" transform="rotate(45 13 13)"/><circle cx="13" cy="13" r="3"/></pattern>' +
+      '<pattern id="cbR" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M6 1l2 3 3 2-3 2-2 3-2-3-3-2 3-2z"/></pattern></defs>' +
+      '<rect x="3" y="3" width="234" height="334" rx="3"/><rect x="10" y="10" width="220" height="320" rx="2" opacity=".7"/>' +
+      '<rect x="14" y="14" width="212" height="312" fill="url(#cbR)" stroke="none" opacity=".55"/><rect x="26" y="26" width="188" height="288" rx="2"/>' +
+      '<rect x="28" y="28" width="184" height="284" fill="url(#cbS)" stroke="none" opacity=".5"/>' +
+      '<path d="M66 56H174L186 68V272L174 284H66L54 272V68Z" fill="#f8efd3" stroke-width="1.7"/>' +
+      '<path d="M70 64H170L178 72V268L170 276H70L62 268V72Z" opacity=".75"/>' +
+      '<path d="M120 60l3 3-3 3-3-3zM120 274l3 3-3 3-3-3zM60 168l3 3-3 3-3-3zM180 168l3 3-3 3-3-3z" opacity=".9"/></svg>';
+    var VINE = '<svg viewBox="0 0 120 30" width="96" height="24"><path d="M4 15Q22 2 40 15T76 15T116 15"/><path d="M22 9q-3-6-9-6M58 21q3 6 9 6M94 9q3-6 9-6M40 15l-4 6M76 15l4-6"/><circle cx="60" cy="15" r="2.4"/></svg>';
+    function lines(n, indent) {
+      var h = '';
+      for (var i = 0; i < n; i++) {
+        var w = i === n - 1 ? 28 + rnd() * 44 : 90 + rnd() * 10;
+        h += '<b style="width:' + w.toFixed(0) + '%' + (i === 0 && indent ? ';margin-left:12%' : '') + '"></b>';
+      }
+      return h + '<u></u>';
+    }
+    var AR = ['بسم الله الرحمن الرحيم', 'وقل رب زدني علما', 'العلم نور', 'الحمد لله رب العالمين'];
+    var PAGES = {
+      text: function (n) { return '<div class="tx">' + lines(7, 1) + lines(6, 1) + lines(5, 1) + '</div><i class="pn">' + n + '</i>'; },
+      head: function (n) { return '<h6>Начало знаний</h6>' + ORN + '<div class="dcw"><p class="dc">ب</p><div class="tx">' + lines(6) + '</div></div><div class="tx">' + lines(7, 1) + lines(4, 1) + '</div><i class="pn">' + n + '</i>'; },
+      arab: function (n) { return '<p class="ar">' + AR[n % 4] + '</p>' + ORN + '<div class="tx">' + lines(6, 1) + lines(8, 1) + '</div><i class="pn">' + n + '</i>'; },
+      vine: function (n) { return VINE + '<div class="tx">' + lines(9, 1) + '</div>' + VINE + '<div class="tx">' + lines(5, 1) + '</div><i class="pn">' + n + '</i>'; },
+      arch: function (n) { return '<div class="tart"><div class="sq">' + ARCH + '<div class="tp"><svg class="ts" viewBox="0 0 40 40" width="28" height="28">' + star(20, 20, 18, 9, 8) + '<circle cx="20" cy="20" r="3.6"/></svg><i class="t1">Сокровищница</i><i class="t2">Ислама</i>' + ORN + '<i class="t3">Книги · Знания · Вера</i>' + CRES + '</div></div></div><i class="pn">' + n + '</i>'; },
+      title: function () { return '<div class="ttl">' + CRES + '<h6>Сокровищница<br>Ислама</h6>' + ORN + '<i class="cap">Книги · Знания · Вера</i></div>'; },
+      geo: function (n) { return '<div class="geo"></div><i class="pn">' + n + '</i>'; },
+      quote: function (n) { return '<div class="qt"><p class="ar">العلم قبل القول والعمل</p>' + ORN + '<h6>Знание — прежде слова и дела</h6></div><div class="tx">' + lines(4, 1) + '</div><i class="pn">' + n + '</i>'; }
+    };
+    var FRONT = ['title', 'text', 'geo', 'arab', 'vine', 'text', 'quote', 'head', 'arab', 'text', 'geo', 'vine', 'text', 'head'];   // правые стороны листов
+    var BACK  = ['text', 'head', 'text', 'quote', 'text', 'arab', 'arch', 'geo', 'text', 'vine', 'arab', 'text', 'head', 'text'];    // обратные стороны
+    var pg0 = $('.pg0', host); if (pg0) pg0.innerHTML = '<div class="pc">' + PAGES.text(29) + '</div>';
+    var fi = $('.fi', host); if (fi) fi.innerHTML = '<div class="pc end"></div>';
+    var leaves = [];
+    for (var li = 0; li < N; li++) {
+      var lf = document.createElement('div'); lf.className = 'leaf';
+      lf.innerHTML = '<i class="f lf"><div class="pc">' + PAGES[FRONT[li]](li * 2 + 1) + '</div>' + (li === K ? '<i class="rib"></i>' : '') + '</i>' +
+                     '<i class="f lb"><div class="pc">' + PAGES[BACK[li]](li * 2 + 2) + '</div></i>';
+      book.insertBefore(lf, front); leaves.push(lf);
+    }
     function render(p) {
       var e1 = ease(seg(p, .08, .6));                                          // обложка откидывается
       var spanL = W * Math.max(0, -Math.cos(178 * e1 * RAD));                   // ширина откинутой половины
       var bw = host.offsetWidth, bh = host.offsetHeight;
-      var scC = Math.min(bh * .76 / H, bw * .52 / W), scO = Math.min(bw * .94 / (2 * W), bh * .76 / H);
+      var scC = Math.min(bh * .76 / H, bw * .52 / W), scO = Math.min(bw * .94 / (2 * W), bh * .76 / H) * .9;   // запас под наклон и веер страниц
       var sc = scC + (scO - scC) * e1;
-      cam.style.transform = 'scale(' + sc.toFixed(4) + ') rotateX(-6deg) rotateY(' + (-26 * (1 - e1)).toFixed(2) + 'deg)';
+      cam.style.transform = 'scale(' + sc.toFixed(4) + ') rotateX(' + (-6 - 10 * e1).toFixed(2) + 'deg) rotateY(' + (-26 * (1 - e1) + 4 * e1).toFixed(2) + 'deg)';   // раскрытая книга чуть наклонена к зрителю — видна толщина блока
       book.style.transform = 'translate3d(' + (-(W - spanL) / 2).toFixed(2) + 'px,0,0)';   // разворот всегда по центру
       front.style.transform = 'translateZ(' + (D / 2) + 'px) rotateY(' + (-178 * e1).toFixed(2) + 'deg)';
-      leaves.forEach(function (l, i) {                                          // листы по очереди
-        var f = ease(seg(p, .44 + i * .07, .74 + i * .07));
-        l.style.transform = 'translateZ(' + (23 - i * 1.2) + 'px) rotateY(' + (-f * (166 - i * 7)).toFixed(2) + 'deg)';
+      leaves.forEach(function (l, i) {
+        var z = 24 - i * .5, ang;
+        if (i < K) {                                                            // листы по очереди перелистываются влево и ложатся веером
+          var a0 = .40 + i * .04;
+          ang = ease(seg(p, a0, a0 + .26)) * (176 - i * 3.8);
+        } else {                                                                // оставшиеся справа слегка приподнимаются веером
+          ang = ease(seg(p, .74 + (i - K) * .025, 1)) * (3 + (N - 1 - i) * 27 / (N - 1 - K));
+        }
+        l.style.transform = 'translateZ(' + z + 'px) rotateY(' + (-ang).toFixed(2) + 'deg)';
       });
     }
     function progress() { var r = host.getBoundingClientRect(), vh = innerHeight; return clamp((vh * .94 - r.top) / (vh * .6), 0, 1); }
