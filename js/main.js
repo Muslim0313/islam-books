@@ -117,9 +117,14 @@
   }
 
   /* ---------- цены ---------- */
+  var MIN_OPT = 7000;   // оптовый заказ принимается от этой суммы, ₽
   function unit(b, qty) {
-    return (state.mode === 1 && qty >= b.minOpt) ? b.wholesale : b.retail;
+    return state.mode === 1 ? b.wholesale : b.retail;
   }
+  function cartSum() {
+    return Object.keys(state.cart).reduce(function (s, k) { return byId[k] && state.cart[k] > 0 ? s + unit(byId[k], state.cart[k]) * state.cart[k] : s; }, 0);
+  }
+  function optShort() { return state.mode === 1 ? Math.max(0, MIN_OPT - cartSum()) : 0; }   // сколько не хватает до минимального оптового заказа
 
   /* =========================================================
      РАЗДЕЛЫ, МЕНЮ, ЛЕНТА
@@ -180,7 +185,7 @@
     var inWish = state.wish.indexOf(b.id) > -1;
     var opt = state.mode === 1;
     var priceHTML = opt
-      ? '<b>' + rub(b.wholesale) + '</b><s>' + rub(b.retail) + '</s><small>опт от ' + b.minOpt + ' шт.</small>'
+      ? '<b>' + rub(b.wholesale) + '</b><s>' + rub(b.retail) + '</s><small>опт, заказ от ' + rub(MIN_OPT) + '</small>'
       : '<b>' + rub(b.retail) + '</b><small>розница</small>';
     return '<article class="card" style="--i:' + (i % 12) + '" data-id="' + b.id + '">' +
       '<div class="cover-wrap"' + bgStyle(b) + '>' +
@@ -242,11 +247,10 @@
       foot.innerHTML = '<a class="btn btn-gold" href="#catalog" data-close>Перейти в каталог <svg class="ico"><use href="#i-arrow"/></svg></a>';
       return;
     }
-    var total = 0, hint = false;
+    var total = 0;
     list.innerHTML = ids.map(function (k) {
       var b = byId[k], q = state.cart[k], u = unit(b, q), s = u * q; total += s;
       var note = '';
-      if (state.mode === 1 && q < b.minOpt) { note = '<span class="hintopt">ещё ' + (b.minOpt - q) + ' шт. до оптовой цены ' + rub(b.wholesale) + '</span>'; hint = true; }
       return '<div class="line-i" data-id="' + b.id + '"><div class="mini">' + coverHTML(b, true) + '</div>' +
         '<div><h5>' + esc(b.title) + '</h5><small>' + rub(u) + ' / шт.</small>' +
         '<div class="qty"><button type="button" data-q="-1" aria-label="Меньше"><svg class="ico"><use href="#i-minus"/></svg></button><span>' + q + '</span><button type="button" data-q="1" aria-label="Больше"><svg class="ico"><use href="#i-plus"/></svg></button></div>' +
@@ -254,7 +258,10 @@
         '<div class="sum">' + rub(s) + '<button class="rm" type="button" data-rm>Удалить</button></div></div>';
     }).join('');
     foot.innerHTML = '<div class="tot"><span>Итого (' + (state.mode ? 'опт' : 'розница') + ')</span><b>' + rub(total) + '</b></div>' +
-      '<button class="btn btn-gold mag" type="button" id="checkout">Оформить заявку <svg class="ico"><use href="#i-arrow"/></svg></button>' +
+      (optShort()
+        ? '<div class="hintopt" style="margin:2px 0 10px;font-size:13.5px;line-height:1.4">Оптовый заказ принимается от ' + rub(MIN_OPT) + '. Добавьте книг ещё на ' + rub(optShort()) + ' или переключитесь на розницу.</div>' +
+          '<button class="btn btn-gold" type="button" id="checkout" disabled style="opacity:.45;cursor:not-allowed">Оформить заявку</button>'
+        : '<button class="btn btn-gold mag" type="button" id="checkout">Оформить заявку <svg class="ico"><use href="#i-arrow"/></svg></button>') +
       '<span class="note" style="font-size:12px;color:#7f7867">Откроется чат с продавцом. Заказ можно отправить в Telegram или WhatsApp.</span>';
   }
 
@@ -277,8 +284,8 @@
     openModal('<div class="cover-wrap"' + bgStyle(b) + '><div class="cover" style="aspect-ratio:3/4.1">' + coverHTML(b) + '</div></div>' +
       '<div class="info"><span class="cat">' + esc(catName[b.cat]) + '</span><h3>' + esc(b.title) + '</h3><div class="au">' + esc(b.author) + '</div>' +
       '<p>' + esc(b.desc) + '</p>' +
-      '<div class="spec">' + (b.pages ? '<div>Страниц<b>' + b.pages + '</b></div>' : '') + (b.year ? '<div>Год<b>' + b.year + '</b></div>' : '') + '<div>Опт от<b>' + b.minOpt + ' шт.</b></div></div>' +
-      '<div class="prices"><div class="p"><b>' + rub(b.retail) + '</b><span>розница</span></div><div class="p"><b>' + rub(b.wholesale) + '</b><span>опт от ' + b.minOpt + ' шт.</span></div></div>' +
+      '<div class="spec">' + (b.pages ? '<div>Страниц<b>' + b.pages + '</b></div>' : '') + (b.year ? '<div>Год<b>' + b.year + '</b></div>' : '') + '<div>Опт, заказ от<b>' + rub(MIN_OPT) + '</b></div></div>' +
+      '<div class="prices"><div class="p"><b>' + rub(b.retail) + '</b><span>розница</span></div><div class="p"><b>' + rub(b.wholesale) + '</b><span>опт, заказ от ' + rub(MIN_OPT) + '</span></div></div>' +
       '<button class="btn btn-gold mag" type="button" data-addm="' + b.id + '">В корзину <svg class="ico"><use href="#i-arrow"/></svg></button></div>');
   }
   /* ---------- заказ в Telegram продавца ---------- */
@@ -384,7 +391,10 @@
       }
       var cp = t.closest('[data-copy]');
       if (cp) { copyText(tgLast).then(function (ok) { toast(ok ? 'Заказ скопирован. Вставьте его в чат (Ctrl+V)' : 'Выделите текст в окне и скопируйте вручную'); }); return; }
-      if (t.closest('#checkout')) { checkoutForm(); return; }
+      if (t.closest('#checkout')) {
+        if (optShort()) { toast('Оптовый заказ принимается от ' + rub(MIN_OPT) + '. Не хватает ' + rub(optShort())); return; }
+        checkoutForm(); return;
+      }
       var ts = t.closest('[data-toast]'); if (ts) { e.preventDefault(); toast(ts.dataset.toast); return; }
       var md = t.closest('#mode button');
       if (md) {
