@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#04100a">
+<title>Заказ — Сокровищница Ислама</title>
+<link rel="icon" type="image/png" href="assets/favicon.png?v=2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
+<style>
+:root{--black:#04100a;--panel:#0a1b11;--gold:#e8cd9e;--gold-hi:#f6e6c2;--text:#f3ead6;--muted:#a9a18d;--line:rgba(160,215,175,.2);
+  --serif:"Cormorant Garamond","Times New Roman",serif;--sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box;margin:0}
+body{background:var(--black);color:var(--text);font-family:var(--sans);line-height:1.45;min-height:100vh}
+.wrap{max-width:760px;margin:0 auto;padding:28px 16px 48px}
+.brand{font:600 15px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+h1{font:600 clamp(32px,7vw,46px)/1.05 var(--serif);color:var(--gold-hi);margin:10px 0 4px}
+.sub{color:var(--muted);font-size:14px;margin-bottom:22px}
+.list{display:grid;gap:12px}
+.it{display:grid;grid-template-columns:92px 1fr;gap:14px;padding:12px;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.it .im{border-radius:10px;padding:8px;display:grid;place-items:center}
+.it img{display:block;width:100%;height:auto;border-radius:3px;box-shadow:0 6px 16px rgba(0,0,0,.5)}
+.it h2{font:600 22px/1.1 var(--serif);color:var(--gold-hi)}
+.it .au{color:var(--muted);font-size:12.5px;margin-top:3px}
+.it .row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 14px;margin-top:9px;font-size:14px}
+.it .row b{color:var(--gold)}
+.tot{display:flex;justify-content:space-between;align-items:baseline;margin-top:20px;padding:16px 18px;border:1px solid var(--gold);border-radius:16px;font-size:15px}
+.tot b{font:600 30px var(--serif);color:var(--gold-hi)}
+.empty{padding:40px 0;color:var(--muted)}
+a.home{display:inline-block;margin-top:24px;color:var(--gold);font-size:14px}
+@media(max-width:420px){.it{grid-template-columns:78px 1fr}.it h2{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">Сокровищница Ислама</div>
+  <h1>Книги в заказе</h1>
+  <p class="sub" id="sub"></p>
+  <div class="list" id="list"></div>
+  <div id="tot"></div>
+  <a class="home" href="./">← На сайт</a>
+</div>
+<script src="js/books.js"></script>
+<script>
+(function () {
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function rub(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽'; }
+  function shade(hex, a) {   // a>0 — светлее, a<0 — темнее
+    var n = parseInt(hex.slice(1), 16), c = [n >> 16 & 255, n >> 8 & 255, n & 255].map(function (v) { return Math.round(a >= 0 ? v + (255 - v) * a : v * (1 + a)); });
+    return 'rgb(' + c.join(',') + ')';
+  }
+  var q = new URLSearchParams(location.search), opt = q.get('m') === '1', total = 0, count = 0, html = '';
+  (q.get('b') || '').split(',').forEach(function (p) {
+    var a = p.split('.'), id = +a[0], n = +a[1], b = window.BOOKS.filter(function (x) { return x.id === id; })[0];
+    if (!b || !(n > 0) || n > 999) return;
+    var u = opt ? b.wholesale : b.retail, s = u * n; total += s; count += n;
+    var bg = b.bg ? 'background:linear-gradient(160deg,' + shade(b.bg, .1) + ',' + shade(b.bg, -.55) + ')' : 'background:#123421';
+    html += '<div class="it"><div class="im" style="' + bg + '">' +
+      (b.cover ? '<img src="' + esc(b.cover) + '" alt="' + esc(b.title) + '">' : '') + '</div>' +
+      '<div><h2>' + esc(b.title) + '</h2><div class="au">' + esc(b.author) + '</div>' +
+      '<div class="row"><span>' + n + ' шт. × ' + rub(u) + '</span><b>' + rub(s) + '</b></div></div></div>';
+  });
+  document.getElementById('sub').textContent = html ? (opt ? 'Оптовый заказ' : 'Розничный заказ') + ' · ' + count + ' шт.' : '';
+  document.getElementById('list').innerHTML = html || '<p class="empty">Заказ не найден. Откройте ссылку из сообщения целиком.</p>';
+  if (html) document.getElementById('tot').innerHTML = '<div class="tot"><span>Итого</span><b>' + rub(total) + '</b></div>';
+})();
+</script>
+</body>
+</html>

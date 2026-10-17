@@ -302,8 +302,11 @@
       var b = byId[k], q = state.cart[k], u = unit(b, q), s = u * q; total += s;
       return (i + 1) + '. ' + b.title + (b.author ? ' (' + b.author + ')' : '') + ': ' + q + ' шт. × ' + rub(u) + ' = ' + rub(s);
     });
+    // ссылка на страницу заказа с обложками (мессенджеры не принимают картинки через ссылку, поэтому даём страницу)
+    var base = /^https?:$/.test(location.protocol) && !/^(localhost|127\.|\[)/.test(location.hostname) ? location.origin : 'https://xn----7sbbag0bacmqmfjb3anl0g9b.xn--p1ai';
+    var link = base + '/order.html?m=' + (state.mode ? 1 : 0) + '&b=' + ids.map(function (k) { return k + '.' + state.cart[k]; }).join(',');
     return 'Здравствуйте! Хочу сделать заказ (' + (state.mode ? 'опт' : 'розница') + ').\n\n' + lines.join('\n') +
-      '\n\nИтого: ' + rub(total) + '\n\nИмя: ' + name + '\nТелефон: ' + phone;
+      '\n\nИтого: ' + rub(total) + '\n\nИмя: ' + name + '\nТелефон: ' + phone + '\n\nКниги с обложками: ' + link;
   }
   var tgLast = '';
   function copyText(s) {
