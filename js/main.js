@@ -811,16 +811,15 @@
       }
       return h + '<u></u>';
     }
-    var AR = ['بسم الله الرحمن الرحيم', 'وقل رب زدني علما', 'العلم نور', 'الحمد لله رب العالمين'];
     var PAGES = {
       text: function (n) { return '<div class="tx">' + lines(7, 1) + lines(6, 1) + lines(5, 1) + '</div><i class="pn">' + n + '</i>'; },
-      head: function (n) { return '<h6>Начало знаний</h6>' + ORN + '<div class="dcw"><p class="dc">ب</p><div class="tx">' + lines(6) + '</div></div><div class="tx">' + lines(7, 1) + lines(4, 1) + '</div><i class="pn">' + n + '</i>'; },
-      arab: function (n) { return '<p class="ar">' + AR[n % 4] + '</p>' + ORN + '<div class="tx">' + lines(6, 1) + lines(8, 1) + '</div><i class="pn">' + n + '</i>'; },
+      head: function (n) { return '<h6>Начало знаний</h6>' + ORN + '<div class="dcw"><p class="dc">Н</p><div class="tx">' + lines(6) + '</div></div><div class="tx">' + lines(7, 1) + lines(4, 1) + '</div><i class="pn">' + n + '</i>'; },
+      arab: function (n) { return ORN + '<div class="tx">' + lines(8, 1) + lines(7, 1) + '</div><i class="pn">' + n + '</i>'; },
       vine: function (n) { return VINE + '<div class="tx">' + lines(9, 1) + '</div>' + VINE + '<div class="tx">' + lines(5, 1) + '</div><i class="pn">' + n + '</i>'; },
       arch: function (n) { return '<div class="tart"><div class="sq">' + ARCH + '<div class="tp"><svg class="ts" viewBox="0 0 40 40" width="28" height="28">' + star(20, 20, 18, 9, 8) + '<circle cx="20" cy="20" r="3.6"/></svg><i class="t1">Сокровищница</i><i class="t2">Ислама</i>' + ORN + '<i class="t3">Книги · Знания · Вера</i>' + CRES + '</div></div></div><i class="pn">' + n + '</i>'; },
       title: function () { return '<div class="ttl">' + CRES + '<h6>Сокровищница<br>Ислама</h6>' + ORN + '<i class="cap">Книги · Знания · Вера</i></div>'; },
-      geo: function (n) { return '<div class="geo"></div><i class="pn">' + n + '</i>'; },
-      quote: function (n) { return '<div class="qt"><p class="ar">العلم قبل القول والعمل</p>' + ORN + '<h6>Знание — прежде слова и дела</h6></div><div class="tx">' + lines(4, 1) + '</div><i class="pn">' + n + '</i>'; }
+      geo: function (n) { return '<div class="tx">' + lines(6, 1) + '</div>' + VINE + '<div class="tx">' + lines(8, 1) + '</div><i class="pn">' + n + '</i>'; },
+      quote: function (n) { return '<div class="qt">' + ORN + '<h6>Знание — прежде слова и дела</h6></div><div class="tx">' + lines(4, 1) + '</div><i class="pn">' + n + '</i>'; }
     };
     var FRONT = ['title', 'text', 'geo', 'arab', 'vine', 'text', 'quote', 'head', 'arab', 'text', 'geo', 'vine', 'text', 'head'];   // правые стороны листов
     var BACK  = ['text', 'head', 'text', 'quote', 'text', 'arab', 'arch', 'geo', 'text', 'vine', 'arab', 'text', 'head', 'text'];    // обратные стороны
