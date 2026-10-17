@@ -297,16 +297,11 @@
   function waUrl(text) { return 'https://wa.me/' + WA_NUM + '?text=' + encodeURIComponent(text); }
   function openTg(url) { var w = window.open(url, '_blank'); if (!w) window.location.href = url; }
   function orderText(name, phone) {
-    var ids = Object.keys(state.cart).filter(function (k) { return state.cart[k] > 0 && byId[k]; }), total = 0;
-    var lines = ids.map(function (k, i) {
-      var b = byId[k], q = state.cart[k], u = unit(b, q), s = u * q; total += s;
-      return (i + 1) + '. ' + b.title + (b.author ? ' (' + b.author + ')' : '') + ': ' + q + ' шт. × ' + rub(u) + ' = ' + rub(s);
-    });
+    var ids = Object.keys(state.cart).filter(function (k) { return state.cart[k] > 0 && byId[k]; });
     // ссылка на страницу заказа с обложками (мессенджеры не принимают картинки через ссылку, поэтому даём страницу)
     var base = /^https?:$/.test(location.protocol) && !/^(localhost|127\.|\[)/.test(location.hostname) ? location.origin : 'https://xn----7sbbag0bacmqmfjb3anl0g9b.xn--p1ai';
     var link = base + '/order.html?m=' + (state.mode ? 1 : 0) + '&b=' + ids.map(function (k) { return k + '.' + state.cart[k]; }).join(',');
-    return 'Здравствуйте! Хочу сделать заказ (' + (state.mode ? 'опт' : 'розница') + ').\n\n' + lines.join('\n') +
-      '\n\nИтого: ' + rub(total) + '\n\nИмя: ' + name + '\nТелефон: ' + phone + '\n\nКниги с обложками: ' + link;
+    return 'Здравствуйте! Хочу сделать заказ (' + (state.mode ? 'опт' : 'розница') + ').\n\nИмя: ' + name + '\nТелефон: ' + phone + '\n\nЗаказ: ' + link;
   }
   var tgLast = '';
   function copyText(s) {
