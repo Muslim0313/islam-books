@@ -291,7 +291,7 @@
       '<button class="btn btn-gold mag" type="button" data-addm="' + b.id + '">В корзину <svg class="ico"><use href="#i-arrow"/></svg></button></div>');
   }
   /* ---------- заказ в Telegram продавца ---------- */
-  var TG_USER = 'Arion9697';   // username продавца без @
+  var TG_USER = 'Arion9596';   // username продавца без @
   function tgUrl(text) { return 'https://t.me/' + TG_USER + '?text=' + encodeURIComponent(text); }
   var WA_NUM = '79289737940';   // WhatsApp продавца: +7 928 973-79-40, только цифры
   function waUrl(text) { return 'https://wa.me/' + WA_NUM + '?text=' + encodeURIComponent(text); }
