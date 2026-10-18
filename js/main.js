@@ -265,7 +265,7 @@
         ? '<div class="hintopt" style="margin:2px 0 10px;font-size:13.5px;line-height:1.4">Оптовый заказ принимается от ' + rub(MIN_OPT) + '. Добавьте книг ещё на ' + rub(optShort()) + ' или переключитесь на розницу.</div>' +
           '<button class="btn btn-gold" type="button" id="checkout" disabled style="opacity:.45;cursor:not-allowed">Оформить заявку</button>'
         : '<button class="btn btn-gold mag" type="button" id="checkout">Оформить заявку <svg class="ico"><use href="#i-arrow"/></svg></button>') +
-      '<span class="note" style="font-size:12px;color:#7f7867">Откроется чат с продавцом. Заказ можно отправить в Telegram или WhatsApp.</span>';
+      '<span class="note" style="font-size:12px;color:#7f7867">Откроется чат с продавцом. Заказ отправляется в Telegram.</span>';
   }
 
   function openDrawer() { sfx.play('page'); renderCart(); $('#drawer').classList.add('on'); $('#drawer').setAttribute('aria-hidden', 'false'); $('#scrim').classList.add('on'); document.body.style.overflow = 'hidden'; }
@@ -294,8 +294,6 @@
   /* ---------- заказ в Telegram продавца ---------- */
   var TG_USER = 'Arion9596';   // username продавца без @
   function tgUrl(text) { return 'https://t.me/' + TG_USER + '?text=' + encodeURIComponent(text); }
-  var WA_NUM = '79289737940';   // WhatsApp продавца: +7 928 973-79-40, только цифры
-  function waUrl(text) { return 'https://wa.me/' + WA_NUM + '?text=' + encodeURIComponent(text); }
   function openTg(url) { var w = window.open(url, '_blank'); if (!w) window.location.href = url; }
   function orderText(name, phone) {
     var ids = Object.keys(state.cart).filter(function (k) { return state.cart[k] > 0 && byId[k]; });
@@ -313,18 +311,17 @@
   function tgSent(text, name, clearCart, via) {
     tgLast = text;
     var url = tgUrl(text), web = 'https://web.telegram.org/k/#@' + TG_USER;
-    openTg(via === 'wa' ? waUrl(text) : url); copyText(text);
+    openTg(url); copyText(text);
     if (clearCart) { state.cart = {}; saveCart(); }
     openModal('<div style="grid-column:1/-1;max-width:480px;margin:0 auto;width:100%"><span class="eyebrow" style="color:var(--gold)">Почти готово</span>' +
       '<h3 style="font-family:var(--serif);font-weight:500;font-size:38px;line-height:1.02;margin:14px 0 12px;color:#f9f1de">' + esc(name) + ', отправьте заказ продавцу</h3>' +
-      '<p style="color:#cfc6af;margin-bottom:14px">'+ (via === 'wa' ? 'Мы открыли WhatsApp с готовым заказом.' : 'Мы открыли Telegram с готовым заказом.') +' Если мессенджер не открылся или удобнее другой, воспользуйтесь кнопками ниже.</p>' +
+      '<p style="color:#cfc6af;margin-bottom:14px">Мы открыли Telegram с готовым заказом. Если мессенджер не открылся, воспользуйтесь кнопками ниже.</p>' +
       '<textarea readonly rows="7" style="width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.25);color:#e8dfc8;font:inherit;font-size:13.5px;line-height:1.45;resize:none">' + esc(text) + '</textarea>' +
       '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:14px">' +
       '<a class="btn btn-gold" href="' + esc(url) + '" target="_blank" rel="noopener">Открыть Telegram <svg class="ico"><use href="#i-arrow"/></svg></a>' +
-      '<a class="btn btn-gold" href="' + esc(waUrl(text)) + '" target="_blank" rel="noopener">Написать в WhatsApp <svg class="ico"><use href="#i-arrow"/></svg></a>' +
       '<a class="btn btn-ghost" href="' + web + '" target="_blank" rel="noopener">Telegram Web</a>' +
       '<button class="btn btn-ghost" type="button" data-copy>Скопировать заказ</button></div>' +
-      '<p class="note" style="margin-top:14px">В WhatsApp заказ подставится сам. В Telegram Web откройте чат с @' + TG_USER + ' и вставьте скопированный текст (Ctrl+V).</p></div>');
+      '<p class="note" style="margin-top:14px">В Telegram Web откройте чат с @' + TG_USER + ' и вставьте скопированный текст (Ctrl+V).</p></div>');
   }  function checkoutForm() {
     closeDrawer();
     openModal('<div style="grid-column:1/-1;max-width:460px;margin:0 auto;width:100%"><span class="eyebrow" style="color:var(--gold)">Оформление</span>' +
@@ -333,8 +330,7 @@
       '<div class="field"><input id="cName" placeholder=" " autocomplete="name" required><label for="cName">Ваше имя</label></div>' +
       '<div class="field"><input id="cPhone" placeholder=" " type="tel" autocomplete="tel" required><label for="cPhone">Телефон</label></div>' +
       '<button class="btn btn-gold mag" type="submit" value="tg">Заказать в Telegram <svg class="ico"><use href="#i-arrow"/></svg></button>' +
-      '<button class="btn btn-ghost mag" type="submit" value="wa">Заказать в WhatsApp <svg class="ico"><use href="#i-arrow"/></svg></button>' +
-      '<p class="note">Заказ уже будет написан. Отправить его можно в Telegram или WhatsApp.</p></form></div>');
+      '<p class="note">Заказ уже будет написан. Он откроется в Telegram.</p></form></div>');
     setTimeout(function () { var i = $('#cName'); if (i) i.focus(); }, 300);
   }
 
