@@ -9,6 +9,7 @@
   var clamp = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var finePointer = window.matchMedia && matchMedia('(hover:hover) and (pointer:fine)').matches;
+  var lite = window.matchMedia && matchMedia('(max-width:860px), (pointer:coarse)').matches;   // телефон/планшет: лёгкий режим без постоянных анимаций
   var rub = function (n) { return new Intl.NumberFormat('ru-RU').format(n) + ' ₽'; };
   var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
 
@@ -449,11 +450,14 @@
   function bindFx() {
     /* — шапка и прогресс — */
     var hdr = $('#hdr'), bar = $('#progress');
+    var docH = 0, solid = null;
+    function measureDoc() { docH = document.documentElement.scrollHeight - innerHeight; }
     function onScrollUi() {
-      hdr.classList.toggle('is-solid', scrollY > 30);
-      var h = document.documentElement.scrollHeight - innerHeight;
-      bar.style.transform = 'scaleX(' + (h > 0 ? scrollY / h : 0) + ')';
+      var y = scrollY, s = y > 30;
+      if (s !== solid) { solid = s; hdr.classList.toggle('is-solid', s); }
+      bar.style.transform = 'scaleX(' + (docH > 0 ? Math.min(1, y / docH) : 0) + ')';
     }
+    measureDoc(); window.addEventListener('resize', measureDoc); window.addEventListener('load', measureDoc); setTimeout(measureDoc, 1500); setTimeout(measureDoc, 4000);
 
     /* — reveal — */
     var io = new IntersectionObserver(function (en) {
@@ -471,11 +475,16 @@
     /* — активный пункт меню — */
     var links = $$('.nav a[href^="#"]');
     var secs = ['top', 'about', 'delivery', 'contacts'].map(function (id) { return document.getElementById(id); });
+    var navPts = [], navCur = null;
+    function measureNav() { navPts = [['delivery', '#delivery'], ['about', '#about'], ['contacts', '#contacts']].map(function (p) { var el = document.querySelector(p[1]); return el ? [p[0], el.offsetTop] : null; }).filter(Boolean); }
     function activeNav() {
       var cur = 'top', y = scrollY + innerHeight * .35;
-      [['delivery', '#delivery'], ['about', '#about'], ['contacts', '#contacts']].forEach(function (p) { var el = document.querySelector(p[1]); if (el && el.offsetTop <= y) cur = p[0]; });
-      links.forEach(function (a) { a.classList.toggle('is-active', a.getAttribute('href') === '#' + (cur === 'top' ? 'top' : cur)); });
+      navPts.forEach(function (p) { if (p[1] <= y) cur = p[0]; });
+      if (cur === navCur) return; navCur = cur;
+      links.forEach(function (a) { a.classList.toggle('is-active', a.getAttribute('href') === '#' + cur); });
     }
+    function remeasureNav() { measureNav(); navCur = null; activeNav(); }
+    measureNav(); window.addEventListener('resize', remeasureNav); window.addEventListener('load', remeasureNav); setTimeout(remeasureNav, 2500);
 
     /* — курсор — */
     if (finePointer && !reduce) {
@@ -532,7 +541,8 @@
       })();
     }
 
-    window.addEventListener('scroll', function () { onScrollUi(); activeNav(); }, { passive: true });
+    var scTick = false;
+    window.addEventListener('scroll', function () { if (scTick) return; scTick = true; requestAnimationFrame(function () { scTick = false; onScrollUi(); activeNav(); }); }, { passive: true });
     onScrollUi(); activeNav();
   }
 
@@ -540,7 +550,7 @@
      ЗОЛОТАЯ ПЫЛЬ
      ========================================================= */
   function dust() {
-    if (reduce) { $('#dust').style.display = 'none'; return; }
+    if (reduce || lite) { $('#dust').style.display = 'none'; return; }
     var cv = $('#dust'), ctx = cv.getContext('2d'), W, H, dpr = Math.min(devicePixelRatio || 1, 2), P = [], vis = true;
     function size() { W = cv.width = innerWidth * dpr; H = cv.height = innerHeight * dpr; }
     size(); addEventListener('resize', size);
@@ -569,11 +579,11 @@
   function pngs() {
     var probe = new Image();
     probe.onload = function () {
-      var r = $('#relicImg'); r.src = 'assets/lantern.png';
-      var h = $('#heroLantern'); h.src = 'assets/lantern.png'; h.classList.add('on');
+      var r = $('#relicImg'); r.src = 'assets/lantern.webp?v=1';
+      var h = $('#heroLantern'); h.src = 'assets/lantern.webp?v=1'; h.classList.add('on');
     };
     probe.onerror = function () { var rel = $('#relic'); if (rel) rel.style.display = 'none'; };
-    probe.src = 'assets/lantern.png';
+    probe.src = 'assets/lantern.webp?v=1';
   }
 
   /* =========================================================
@@ -680,7 +690,8 @@
     var closed = false; try { closed = sessionStorage.getItem('promoX') === '1'; } catch (e) {}
     if (closed) { el.parentNode.removeChild(el); root.style.setProperty('--promo-h', '0px'); return; }
     root.classList.add('has-promo');
-    function pos() { root.style.setProperty('--promo-h', Math.max(0, 36 - scrollY) + 'px'); }   // плашка уезжает вместе со страницей
+    var lastH = -1;
+    function pos() { var h = Math.max(0, 36 - scrollY); if (h === lastH) return; lastH = h; root.style.setProperty('--promo-h', h + 'px'); }   // плашка уезжает вместе со страницей
     pos(); window.addEventListener('scroll', pos, { passive: true });
     $('#promoX').addEventListener('click', function () {
       window.removeEventListener('scroll', pos);
@@ -743,7 +754,7 @@
      ДЕКОР-PNG: лёгкий параллакс при прокрутке
      ========================================================= */
   function deco() {
-    var els = $$('[data-deco]'); if (!els.length || reduce) return;
+    var els = $$('[data-deco]'); if (!els.length || reduce || lite) return;
     var ticking = false;
     function upd() {
       ticking = false; var vh = innerHeight;
@@ -853,14 +864,25 @@
       });
     }
     function progress() { var r = host.getBoundingClientRect(), vh = innerHeight; return clamp((vh * .94 - r.top) / (vh * .6), 0, 1); }
+    /* цикл анимации работает только пока книга на экране (или ещё доезжает до нужного положения) */
+    var running = false, seen = true;
     function tick() {
       var p = progress(); cur += (p - cur) * .12;
       if (Math.abs(p - cur) < .0005) cur = p;
       if (cur !== last) { render(cur); last = cur; }
-      requestAnimationFrame(tick);
+      if (seen || cur !== p) requestAnimationFrame(tick); else running = false;
     }
-    if (reduce) { render(1); } else { render(0); tick(); }
-    window.addEventListener('resize', function () { last = -1; });
+    function kick() { if (!running) { running = true; requestAnimationFrame(tick); } }
+    if (reduce) { render(1); }
+    else {
+      render(0);
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (en) { seen = en[0].isIntersecting; if (seen) kick(); }, { rootMargin: '200px 0px' }).observe(host);
+        window.addEventListener('scroll', kick, { passive: true });
+      }
+      kick();
+    }
+    window.addEventListener('resize', function () { last = -1; if (!reduce) kick(); });
   }
   /* ---------- пропорции обложек-фото ----------
      Рамка обложки у всех 3:4.1. Если у книги другие пропорции (поле ar), обложка подгоняется под них без растяжения
@@ -878,7 +900,14 @@
       c.style.marginTop = c.style.marginBottom = (Math.max(0, 1 / F - k / ar) / 2 * 100).toFixed(2) + '%';   // по вертикали — в центре рамки
     });
   }
-  new MutationObserver(fitCovers).observe(document.body, { childList: true, subtree: true });
+  /* реагируем только на появление новых элементов (смена текста счётчиков и цен не в счёт) и не чаще раза за кадр */
+  var fitQueued = false;
+  new MutationObserver(function (ms) {
+    if (fitQueued) return;
+    for (var i = 0; i < ms.length; i++) for (var j = 0; j < ms[i].addedNodes.length; j++) if (ms[i].addedNodes[j].nodeType === 1) {
+      fitQueued = true; requestAnimationFrame(function () { fitQueued = false; fitCovers(); }); return;
+    }
+  }).observe(document.body, { childList: true, subtree: true });
 
   /* ---------- запуск ---------- */
   loader(); promo();

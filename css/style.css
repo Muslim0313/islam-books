@@ -947,3 +947,33 @@ body:not(.ready) .hero .hero-ship{animation-play-state:paused}
   .relic{min-height:240px}
   .relic img{height:clamp(230px,38vh,330px)}
 }
+
+/* =========================================================
+   ЛЁГКИЙ РЕЖИМ ДЛЯ ТЕЛЕФОНОВ И ПЛАНШЕТОВ
+   Без постоянных анимаций, размытия под стеклом, смешивания слоёв и тяжёлых масок —
+   страница прокручивается плавно. Вид остаётся прежним, кроме краёв «листов».
+   ========================================================= */
+@media (max-width:860px),(pointer:coarse){
+  /* фон: вместо background-attachment:fixed — отдельный закреплённый слой */
+  body{background:var(--black)}
+  body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(60% 40% at 100% 0%,rgba(40,150,88,.22),transparent 65%),
+      radial-gradient(55% 45% at 0% 45%,rgba(40,150,88,.15),transparent 65%),
+      radial-gradient(70% 40% at 50% 100%,rgba(40,150,88,.18),transparent 70%)}
+  /* никакого размытия подложки */
+  .hdr.is-solid{background:rgba(4,16,10,.95);backdrop-filter:none;-webkit-backdrop-filter:none}
+  .tile{backdrop-filter:none;-webkit-backdrop-filter:none;background:linear-gradient(180deg,rgba(20,54,36,.96),rgba(8,24,15,.98))}
+  .wish{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(4,16,10,.78)}
+  .scrim{backdrop-filter:none;-webkit-backdrop-filter:none}
+  /* бесконечные анимации и смешивание слоёв выключены */
+  .hero-lantern,.relic img,.relic .halo,.deco,.promo::before{animation:none}
+  .relic .halo{filter:none}
+  .hero::after{mix-blend-mode:normal;opacity:.2}
+  .cover .glare{display:none}
+  .mag,.hero-bg .hero-media{will-change:auto}
+  /* книга над каталогом: без тени-фильтра на 3D-сцене */
+  .catbook .cb-scene{filter:none}
+  /* «листы»: вместо тяжёлой маски на огромном блоке — обычные скруглённые края */
+  .paper{-webkit-mask:none;mask:none;border-radius:34px/26px}
+}
